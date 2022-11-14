@@ -1,0 +1,2 @@
+metapy
+functions-framework==3.*
