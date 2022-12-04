@@ -3,6 +3,13 @@
   "name": "Hello Extensions",
   "description": "Base Level Extension",
   "version": "1.0",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "content_scripts": [
+    {
+      "js": ["scripts/content.js"],
+      "matches": ["https://*/*"]
+    }
+  ],
   "action": {
     "default_popup": "hello.html"
   }
