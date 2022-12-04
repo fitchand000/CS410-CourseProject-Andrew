@@ -13,13 +13,6 @@ function query() {
                 });
             });
     });
-
-    // // https://stackoverflow.com/questions/40645538/communicate-data-from-popup-to-content-script-injected-by-popup-with-executescri
-    // chrome.storage.local.get('docText', function (items) {
-    //     if (items != null) {
-    //         runQuery(searchQuery, items.docText);
-    //     }
-    // });
 }
 
 async function runQuery(searchQuery, docText) {
@@ -37,18 +30,3 @@ async function runQuery(searchQuery, docText) {
     });
     return response.json(); // parses JSON response into native JavaScript objects
 }
-
-
-// function query() {
-//     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-//         let searchQuery = document.getElementById("search").value;
-//         chrome.storage.local.set({
-//             searchQuery: searchQuery
-//         }, function () {
-//             chrome.scripting.executeScript(
-//                 {target: {tabId: tabs[0].id}, files: ['scripts/content.js']},
-//                 () => chrome.runtime.lastError
-//             );
-//         });
-//     });
-// }
