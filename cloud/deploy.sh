@@ -1,4 +1,4 @@
-gcloud functions deploy test-cli-deploy \
+gcloud functions deploy search-bm25 \
 --region=us-central1 \
 --runtime=python37 \
 --project=cs-410-project \
