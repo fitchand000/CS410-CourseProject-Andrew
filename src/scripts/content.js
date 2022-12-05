@@ -1,8 +1,9 @@
 // listen for messages sent from background.js
-console.log("Getting Text!") // new url is now in content scripts!
 chrome.storage.local.set({
     docText: document.body.innerText
 }).then(() => console.log("text is set"));
+
+
 
 function highlight(text) {
     let inputText = document.body;
