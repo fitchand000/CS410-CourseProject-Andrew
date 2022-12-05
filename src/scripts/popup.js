@@ -16,7 +16,7 @@ document.getElementById('prev').addEventListener("click", prevResult);
  */
 function query() {
     // New query, clear old results
-    chrome.storage.local.remove('searchResult');
+    chrome.storage.local.remove('curResult');
     index = -1
 
     // get the search query
@@ -36,9 +36,11 @@ function query() {
 
                     // run the search query and enable
                     if (items != null) {
-                        searchResults = runQuery(searchQuery, items.docText);
-                        document.getElementById("prev").disabled = false;
-                        document.getElementById("next").disabled = false;
+                        runQuery(searchQuery, items.docText).then(res => {
+                            searchResults = res['result'];
+                            document.getElementById("prev").disabled = false;
+                            document.getElementById("next").disabled = false;
+                        });
                     }
                 });
             });
@@ -46,18 +48,48 @@ function query() {
 }
 
 /**
- * Go to the next search result in the text
+ * Go to the next search result in the text. Wrap around to 0 if at the end
  */
 function nextResult() {
-    console.log("hi");
+    if (index === 4 || index >= searchResults.length) {
+        index = 0
+    } else {
+        index++;
+    }
+    highlightResult()
 }
 
 /**
- * go to the previous search result in the text
+ * go to the previous search result in the text. Wrap around to end of list if at the start.
  */
 function prevResult() {
-    console.log("hi");
+    if (index < 1) {
+        index = searchResults.length - 1
+    } else {
+        index--;
+    }
+    highlightResult()
+}
 
+/**
+ * highlights the text in the active webpage referenced by searchResult[index]
+ */
+function highlightResult() {
+    // text to highlight
+    let res = searchResults[index]
+
+    // put the current search result in local storage
+    chrome.storage.local.set({
+        curResult: res
+    }).then(() => console.log('getting search result'));
+
+    // select current tab
+    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+
+        // execute content script highlight text segment of result
+        chrome.scripting.executeScript({target: {tabId: tabs[0].id}, files: ['scripts/content.js']},
+            () => chrome.runtime.lastError);
+    });
 }
 
 /**
