@@ -1,20 +1,16 @@
 
 // Try to get search result to highlight
 chrome.storage.local.get('curResult', function (result) {
-
     // if a search result is present in local storage, highlight it
     if (result != null && result.curResult) {
         highlight(result.curResult)
     } else {
-        // put the document text in local storage
-        chrome.storage.local.set({
-            docText: document.body.innerText
-        }).then(() => console.log("text is set"));
+        // send document text back to popup script
+        chrome.runtime.sendMessage({docText: document.body.innerText});
     }
 });
 
 function highlight(text) {
-    console.log("about to highlight: ")
     console.log(text)
     let inputText = document.body;
     let innerHTML = inputText.innerHTML;
