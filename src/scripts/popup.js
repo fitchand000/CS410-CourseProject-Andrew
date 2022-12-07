@@ -43,6 +43,8 @@ function query() {
     // New query, clear old results
     chrome.storage.local.remove('curResult');
     index = -1
+    document.getElementById("prev").disabled = true;
+    document.getElementById("next").disabled = true;
 
     // get the search query
     searchQuery = document.getElementById("search").value;
@@ -68,7 +70,6 @@ chrome.runtime.onMessage.addListener(
 
         // run the search query and enable prev and next buttons
         runQuery(searchQuery, docText).then(res => {
-            document.getElementById("logs").innerText = "ran query";
             searchResults = res['result'];
             document.getElementById("prev").disabled = false;
             document.getElementById("next").disabled = false;
